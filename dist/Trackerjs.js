@@ -19,7 +19,7 @@ class TrackerClient {
                 throw new Error("You have hit a rate-limit, slow down");
         }
     }
-    async getApexProfileStats(platform, identifier, apiKey) {
+    async getApexPlayerStats(platform, identifier) {
         console.log(platform);
         if (!["origin", "xbl", "psn"].includes(platform))
             throw new Error("Invalud platform provided");
@@ -43,7 +43,7 @@ class TrackerClient {
             }
         };
     }
-    async getCSGOPlayerStats(identifier, apiKey) {
+    async getCSGOPlayerStats(identifier) {
         // console.log(identifier);
         if (/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID");
@@ -67,7 +67,7 @@ class TrackerClient {
             }
         };
     }
-    async getOverwatchStats(platform, identifier, apiKey) {
+    async getOverwatchPlayerStats(platform, identifier) {
         identifier.trim();
         if (!['psn', 'xbl'].includes(platform))
             throw new Error('Invalid platform supplied!');
@@ -90,7 +90,7 @@ class TrackerClient {
             }
         };
     }
-    async getSplitStats(identifier, apiKey) {
+    async getSplitPlayerStats(identifier) {
         if (!/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID");
         }
