@@ -1,0 +1,29 @@
+{
+  "name": "trackerjs",
+  "version": "0.0.1",
+  "description": "NPM Package for working with the tracker.gg API",
+  "main": "tracker.js",
+  "scripts": {
+    "start": "tsc && node ./dist/tracker.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SatanPanda/trackerjs.git"
+  },
+  "keywords": [
+    "API",
+    "tracker.gg"
+  ],
+  "author": "SatanPanda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SatanPanda/trackerjs/issues"
+  },
+  "homepage": "https://github.com/SatanPanda/trackerjs#readme",
+  "dependencies": {
+    "axios": "^0.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.2"
+  }
+}
