@@ -1,6 +1,6 @@
 {
-  "name": "trackerjs",
-  "version": "0.0.1",
+  "name": "tracker.gg",
+  "version": "1.0.0",
   "description": "NPM Package for working with the tracker.gg API",
   "main": "tracker.js",
   "scripts": {
