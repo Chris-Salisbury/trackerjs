@@ -8,7 +8,7 @@
 
 ```js
 import { TrackerClient } from 'tracker.gg'
-const client = new TrackerClient("APIKEY")
+const client = new TrackerClient({ apiKey: process.env.APIKEY })
 
 let data = await client.getOverwatchStats("psn", "SomeRandomUsername")
 console.log(data)

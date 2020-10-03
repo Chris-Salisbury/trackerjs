@@ -1,15 +1,15 @@
 import axios, { AxiosResponse } from 'axios'
 
- interface TrackerOptions {
-     apiKey: string
- }
+interface TrackerOptions {
+    apiKey: string | undefined
+}
 
-export class TrackerClient{
-    apiKey: string;
+export class TrackerClient {
+    apiKey: string | undefined;
     constructor(options: TrackerOptions) {
         this.apiKey = options.apiKey || "";
     }
-    public errorCheck(error: any){
+    public errorCheck(error: any) {
         switch (error.response.status) {
             case 401:
                 throw new Error("API Token is invalid, please make sure it is correct");
@@ -28,7 +28,7 @@ export class TrackerClient{
     * */
 
     public async getApexStats(platform: string, identifier: string) {
-        if(!["origin", "xbl", "psn"].includes(platform)) throw new Error("Invalid platform provided");
+        if (!["origin", "xbl", "psn"].includes(platform)) throw new Error("Invalid platform provided");
         // @ts-ignore
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/apex/standard/profile/${platform}/${identifier}`, {
             headers: { "TRN-Api-Key": this.apiKey }
@@ -52,7 +52,7 @@ export class TrackerClient{
     /*
     * @param {string} identifier - Identifier of the user you are looking up e.g SteamID64
     * */
-    public async getCSGOStats(identifier: string){
+    public async getCSGOStats(identifier: string) {
         //@ts-ignore
         if (/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID")
@@ -76,13 +76,13 @@ export class TrackerClient{
             }
         }
     }
-    
+
     /*
     * @param {string} Platform - Platform for the profile you are looking up. Options: psn, xbl
     * @param {string} Identifier - Identifier of the user you are looking up e.g psn name or xbox gamertag
     * */
-    
-    public async getOverwatchStats(platform: string, identifier: string){
+
+    public async getOverwatchStats(platform: string, identifier: string) {
         if (!['psn', 'xbl'].includes(platform)) throw new Error('Invalid platform supplied!');
         //@ts-ignore
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/overwatch/standard/profile/${platform}/${identifier}`, {
@@ -108,7 +108,7 @@ export class TrackerClient{
     * @param {string} Identifier - Identifier of the user you are looking up e.g SteamID64
     * */
 
-    public async getSplitStats(identifier: string){
+    public async getSplitStats(identifier: string) {
         if (/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID")
         }
