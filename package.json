@@ -1,8 +1,8 @@
 {
   "name": "tracker.gg",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "NPM Package for working with the tracker.gg API",
-  "main": "tracker.js",
+  "main": "./dist/tracker.js",
   "types": "./dist/tracker.d.ts",
   "scripts": {
     "start": "tsc && node ./dist/tracker.js"
