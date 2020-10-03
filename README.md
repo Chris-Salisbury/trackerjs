@@ -21,4 +21,4 @@ console.log(data)
 | getCSGOPlayerStats(identifier) | Returns the CSGO stats for the specified user |
 | getSplitPlayerStats(identifier) | Returns the Splitgate stats for the specified user |
 | getOverwatchPlayerStats(platform, identifier) | Returns the Overwatch stats for the specified user, optional platforms: psn, xbl |
-| getApexProfileStats(platform, identifier) | Returns Apex stats for the specified user |
+| getApexPlayerStats(platform, identifier) | Returns Apex stats for the specified user |
