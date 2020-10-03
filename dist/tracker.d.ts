@@ -1,8 +1,8 @@
 interface TrackerOptions {
-    apiKey: string;
+    apiKey: string | undefined;
 }
 export declare class TrackerClient {
-    apiKey: string;
+    apiKey: string | undefined;
     constructor(options: TrackerOptions);
     errorCheck(error: any): void;
     getApexStats(platform: string, identifier: string): Promise<{
