@@ -54,7 +54,7 @@ export class TrackerClient {
     * */
     public async getCSGOPlayerStats(identifier: string) {
         //@ts-ignore
-        if (/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
+        if (!/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID")
         }
         //@ts-ignore
@@ -109,7 +109,7 @@ export class TrackerClient {
     * */
 
     public async getSplitPlayerStats(identifier: string) {
-        if (/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
+        if (!/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
             throw new Error("Not a valid Steam64ID")
         }
         //@ts-ignore
