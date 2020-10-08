@@ -1,40 +1,44 @@
 import axios, { AxiosResponse } from 'axios'
 
 interface TrackerOptions {
-    apiKey: string | undefined
+    apiKey: string;
 }
 
 export class TrackerClient {
-    apiKey: string | undefined;
+    apiKey: string;
     constructor(options: TrackerOptions) {
-        this.apiKey = options.apiKey || "";
+        this.apiKey = options.apiKey
     }
     public errorCheck(error: any) {
         switch (error.response.status) {
             case 401:
-                throw new Error("API Token is invalid, please make sure it is correct");
+                throw new Error("API Key invalid")
             case 451:
                 throw new Error("Invalid parameters supplied");
             case 404:
                 throw new Error("Username provided is non-existent on tracker.gg");
             case 429:
                 throw new Error("You have hit a rate-limit, slow down")
+            case 503:
+                throw new Error("The request has been stopped, tracker.gg is either down for maitnance or overloaded")
+            case 400:
+                throw new Error("Bad request, you are probably not supplying a correct username or ID")
         }
     }
 
-    /*
-    * @param {string} Platform - The platform of the account you are trying to lookup
-    * @param {string} platformUserIdentifier - The User Identifier e.g username, ID, etc linked to the user on specific platform you are requesting
-    * */
+    /**
+     * @param {string} platform The platform of the user you are trying to lookup e.g origin, psn, xbl
+     * @param {string} identifier The username of the person you are trying to look up.
+     */
 
     public async getApexPlayerStats(platform: string, identifier: string) {
         if (!["origin", "xbl", "psn"].includes(platform)) throw new Error("Invalid platform provided");
         // @ts-ignore
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/apex/standard/profile/${platform}/${identifier}`, {
             headers: { "TRN-Api-Key": this.apiKey }
-        }).catch(error => {
-            return this.errorCheck(error)
-        });
+        }).catch(err => {
+            return this.errorCheck(err)
+        })
         const { data: { data: { platformInfo, metadata, segments } } } = response;
         return {
             data: {
@@ -49,9 +53,9 @@ export class TrackerClient {
             }
         }
     }
-    /*
-    * @param {string} identifier - Identifier of the user you are looking up e.g SteamID64
-    * */
+    /**
+     * @param {string} identifier The SteamID64 of the user you are looking up stats for
+     */
     public async getCSGOPlayerStats(identifier: string) {
         //@ts-ignore
         if (!/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
@@ -60,9 +64,9 @@ export class TrackerClient {
         //@ts-ignore
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/csgo/standard/profile/steam/${identifier}`, {
             headers: { "TRN-Api-Key": this.apiKey }
-        }).catch(error => {
-            return this.errorCheck(error)
-        });
+        }).catch(err => {
+            return this.errorCheck(err)
+        })
         const { data: { data: { platformInfo, segments } } } = response;
         return {
             data: {
@@ -71,25 +75,29 @@ export class TrackerClient {
                     platformUserID: platformInfo.platformUserId,
                     platformUserHandle: platformInfo.platformUserHandle,
                     avatarURL: platformInfo.avatarUrl
-                },
+                    },
                 segments
             }
         }
     }
 
-    /*
-    * @param {string} Platform - Platform for the profile you are looking up. Options: psn, xbl
-    * @param {string} Identifier - Identifier of the user you are looking up e.g psn name or xbox gamertag
-    * */
+    /**
+     * @param {string} platform The platform of the user you are trying to lookup, e.g psn, xbl (Battlenet not yet supported)
+     * @param {string} identifier The Username of the person you are trying to look up.
+     */
 
     public async getOverwatchPlayerStats(platform: string, identifier: string) {
-        if (!['psn', 'xbl'].includes(platform)) throw new Error('Invalid platform supplied!');
+        if (!['battlenet', 'psn', 'xbl'].includes(platform)) throw new Error('Invalid platform supplied!');
+        if (platform === "battlenet" && /(^([A-zÀ-ú][A-zÀ-ú0-9]{2,11})|(^([а-яёА-ЯЁÀ-ú][а-яёА-ЯЁ0-9À-ú]{2,11})))(#[0-9]{4,})$/.test(identifier)) {
+            throw new Error("Battlent is having issues, please use the other methods")
+        }
         //@ts-ignore
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/overwatch/standard/profile/${platform}/${identifier}`, {
             headers: { 'TRN-Api-Key': this.apiKey }
         }).catch(err => {
-            this.errorCheck(err);
-        });
+            console.log(err)
+            return this.errorCheck(err)
+        })
         const { data: { data: { platformInfo, segments } } } = response;
         return {
             data: {
@@ -104,9 +112,9 @@ export class TrackerClient {
         }
     }
 
-    /*
-    * @param {string} Identifier - Identifier of the user you are looking up e.g SteamID64
-    * */
+    /**
+     * @param {string} identifier The SteamID64 of the user you are trying to lookup
+     */
 
     public async getSplitPlayerStats(identifier: string) {
         if (!/(?<STEAMID64>[^\/][0-9]{8,})/.test(identifier)) {
@@ -116,8 +124,8 @@ export class TrackerClient {
         let response: AxiosResponse = await axios.get(`https://public-api.tracker.gg/v2/splitgate/standard/profile/steam/${identifier}`, {
             headers: { 'TRN-Api-Key': this.apiKey }
         }).catch(err => {
-            this.errorCheck(err);
-        });
+            return this.errorCheck(err)
+        })
         const { data: { data: { platformInfo, segments } } } = response;
         return {
             data: {
